@@ -129,7 +129,7 @@ export interface AlertUiState {
   triggeredMS: number;
 }
 
-export interface AlertDataQualityState extends AlertNodeState {}
+export type AlertDataQualityState = AlertNodeState;
 
 export interface AlertDataQualityStats {
   unallowedValues: number;
