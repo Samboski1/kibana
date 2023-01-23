@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-interface SecurityFlyoutPanel {
+export interface SecurityFlyoutPanel {
   /**
    * Unique key to identify the panel
    */
@@ -22,50 +22,4 @@ interface SecurityFlyoutPanel {
    * Tracks visual state such as whether the panel is collapsed
    */
   state?: Record<string, unknown>;
-}
-export interface RightPanel extends SecurityFlyoutPanel {
-  key?: 'right';
-  params?: {
-    id: string;
-    indexName: string;
-  };
-}
-export interface Right2Panel extends SecurityFlyoutPanel {
-  key?: 'right2';
-  params?: {
-    id: string;
-    indexName: string;
-  };
-}
-
-export interface LeftPanel extends SecurityFlyoutPanel {
-  key?: 'left';
-  params?: {
-    id: string;
-    indexName: string;
-  };
-}
-
-export interface Left2Panel extends SecurityFlyoutPanel {
-  key?: 'left2';
-  params?: {
-    id: string;
-    indexName: string;
-  };
-}
-
-export interface PreviewPanel extends SecurityFlyoutPanel {
-  key?: 'preview';
-  params?: {
-    id: string;
-    indexName: string;
-  };
-}
-
-export interface Preview2Panel extends SecurityFlyoutPanel {
-  key?: 'preview2';
-  params?: {
-    id: string;
-    indexName: string;
-  };
 }

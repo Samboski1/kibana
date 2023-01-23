@@ -91,20 +91,12 @@ const RowActionComponent = ({
   );
 
   const handleOnEventDetailPanelOpened = useCallback(() => {
-    const updatedExpandedDetail: ExpandedDetailType = {
-      panelView: 'eventDetail',
-      params: {
-        eventId: eventId ?? '',
-        indexName: indexName ?? '',
-      },
-    };
-
     if (isSecurityFlyoutEnabled) {
       dispatch(
         openSecurityFlyout({
           scope: 'global',
           right: {
-            key: 'right',
+            key: 'event',
             params: {
               id: '',
               indexName,
@@ -113,6 +105,14 @@ const RowActionComponent = ({
         })
       );
     } else {
+      const updatedExpandedDetail: ExpandedDetailType = {
+        panelView: 'eventDetail',
+        params: {
+          eventId: eventId ?? '',
+          indexName: indexName ?? '',
+        },
+      };
+
       dispatch(
         dataTableActions.toggleDetailPanel({
           ...updatedExpandedDetail,
