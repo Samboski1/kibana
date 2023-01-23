@@ -98,7 +98,7 @@ const RowActionComponent = ({
           right: {
             key: 'event',
             params: {
-              id: '',
+              id: eventId,
               indexName,
             },
           },

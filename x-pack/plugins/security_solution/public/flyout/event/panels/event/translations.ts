@@ -7,11 +7,24 @@
 
 import { i18n } from '@kbn/i18n';
 
+export const EVENT_DETAILS = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.eventTitleLabel',
+  { defaultMessage: 'Event details' }
+);
+
+export const HIGHLIGHTED_FIELDS_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.highlightedFields.title',
+  { defaultMessage: 'Highlighted fields' }
+);
+
+export const EXPAND_DETAILS_BUTTON = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.expandDetailButton',
+  { defaultMessage: 'Expand alert details' }
+);
+
 export const OVERVIEW_TAB = i18n.translate(
   'xpack.securitySolution.flyout.eventDetails.overviewTab',
-  {
-    defaultMessage: 'Overview',
-  }
+  { defaultMessage: 'Overview' }
 );
 
 export const TABLE_TAB = i18n.translate('xpack.securitySolution.flyout.eventDetails.tableTab', {

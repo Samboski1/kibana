@@ -7,10 +7,10 @@
 
 import React from 'react';
 import type { EventPanelPaths } from '../panel-model';
-import { EventOverviewTab } from '../overview';
+import { EventOverviewTab } from './tabs/overview-tab';
 import { JSON_TAB, OVERVIEW_TAB, TABLE_TAB } from './translations';
-import { EventTableTab } from '../table';
-import { EventJsonTab } from '../json';
+import { EventTableTab } from './tabs/table-tab';
+import { EventJsonTab } from './tabs/json-tab';
 
 export type EventTabsType = Array<{
   id: EventPanelPaths;

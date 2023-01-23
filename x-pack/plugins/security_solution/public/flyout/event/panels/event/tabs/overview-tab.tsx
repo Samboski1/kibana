@@ -6,11 +6,12 @@
  */
 
 import React from 'react';
+import { MitreDetails } from './mitre-details';
 
 export const EventOverviewTab: React.FC = React.memo(() => {
   return (
     <>
-      <div>overview</div>
+      <MitreDetails />
     </>
   );
 });
