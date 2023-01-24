@@ -17,3 +17,13 @@ export interface EventPanel extends SecurityFlyoutPanel {
     indexName: string;
   };
 }
+
+export type VisualizePanelPaths = 'visualize' | 'insights' | 'investigation' | 'history';
+export interface VisualizePanel extends SecurityFlyoutPanel {
+  key?: 'visualize';
+  path?: VisualizePanelPaths[];
+  params?: {
+    id: string;
+    indexName: string;
+  };
+}

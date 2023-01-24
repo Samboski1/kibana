@@ -35,14 +35,16 @@ export const EventHeader = React.memo(
     setSelectedTabId: (selected: EventPanelPaths) => void;
     handleOnEventClosed?: () => void;
   }) => {
+    const { searchHit } = useEventDetailsPanelContext();
+    const { _id, _index } = searchHit ?? {};
     const { openPanels } = useExpandableFlyoutContext();
     const openAlertDetails = () => {
       openPanels({
         left: {
-          key: '',
+          key: 'visualize',
           params: {
-            id: '',
-            indexName: '',
+            id: _id,
+            indexName: _index,
           },
         },
       });
