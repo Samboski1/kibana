@@ -13,9 +13,7 @@ import { useEventDetailsPanelContext } from '../context';
 
 export const MitreDetails = () => {
   const { searchHit } = useEventDetailsPanelContext();
-  console.log('searchHit', searchHit);
   const threatDetails = useMemo(() => getMitreComponentParts(searchHit), [searchHit]);
-  console.log('threatDetails', threatDetails);
   const { euiTheme } = useEuiTheme();
   return (
     <EuiFlexGroup

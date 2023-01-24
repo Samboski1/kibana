@@ -6,12 +6,23 @@
  */
 
 import React from 'react';
+import { EuiHorizontalRule, EuiSpacer } from '@elastic/eui';
 import { MitreDetails } from './mitre-details';
+import { RuleDetails } from './rule-details';
+import { ReasonDetails } from './reason-details';
+import { HighlightedFields } from './highlighted-fields';
 
 export const EventOverviewTab: React.FC = React.memo(() => {
   return (
     <>
       <MitreDetails />
+      <RuleDetails />
+      <EuiHorizontalRule margin="l" />
+      <p>{'Session Viewer Preview Placeholder'}</p>
+      <EuiSpacer />
+      <ReasonDetails />
+      <EuiSpacer />
+      <HighlightedFields />
     </>
   );
 });

@@ -8,16 +8,16 @@
 import { EuiFlexGroup, EuiPanel } from '@elastic/eui';
 import { css } from '@emotion/react';
 import React, { useMemo, useState } from 'react';
-import { HeaderSection } from '../../../../common/components/header_section';
-import { defaultRowRenderers } from '../../../../timelines/components/timeline/body/renderers';
-import { getRowRenderer } from '../../../../timelines/components/timeline/body/renderers/get_row_renderer';
-import { useExpandableFlyoutContext } from '../../../context';
-import { useEventDetailsPanelContext } from '../event/context';
-import * as i18n from '../event/translations';
+import { HeaderSection } from '../../../../../common/components/header_section';
+import { defaultRowRenderers } from '../../../../../timelines/components/timeline/body/renderers';
+import { getRowRenderer } from '../../../../../timelines/components/timeline/body/renderers/get_row_renderer';
+import { useExpandableFlyoutContext } from '../../../../context';
+import { useEventDetailsPanelContext } from '../context';
+import { ALERT_REASON_TITLE } from '../translations';
 
 export const ReasonDetails = () => {
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
-  const { flyoutScope } = useExpandableFlyoutContext();
+  const { scope } = useExpandableFlyoutContext();
   const { dataAsNestedObject } = useEventDetailsPanelContext();
 
   const renderer = useMemo(
@@ -35,7 +35,7 @@ export const ReasonDetails = () => {
           alignHeader="center"
           hideSubtitle
           outerDirection="row"
-          title={i18n.ALERT_REASON_TITLE}
+          title={ALERT_REASON_TITLE}
           titleSize="xs"
           toggleQuery={setIsPanelExpanded}
           toggleStatus={isPanelExpanded}
@@ -55,8 +55,8 @@ export const ReasonDetails = () => {
             {renderer.renderRow({
               contextId: 'event-details',
               data: dataAsNestedObject,
-              isDraggable: flyoutScope === 'timelineFlyout',
-              scopeId: flyoutScope ?? '',
+              isDraggable: scope === 'timeline',
+              scopeId: scope ?? '',
             })}
           </div>
         )}

@@ -14,11 +14,6 @@ export const EventTableTab: React.FC = React.memo(() => {
   const { browserFields, searchHit, dataFormattedForFieldBrowser } = useEventDetailsPanelContext();
   const eventId = searchHit?._id as string;
 
-  console.log('browserFields', browserFields);
-  console.log('dataFormattedForFieldBrowser', dataFormattedForFieldBrowser);
-  console.log('searchHit', searchHit);
-  console.log('eventId', eventId);
-
   return (
     browserFields &&
     dataFormattedForFieldBrowser && (

@@ -8,6 +8,8 @@
 import type { BrowserFields, TimelineEventsDetailsItem } from '@kbn/timelines-plugin/common';
 import React, { createContext, useContext, useMemo } from 'react';
 import type { SearchHit } from '@kbn/es-types';
+import type { Ecs } from '@kbn/ecs';
+import { noop } from 'lodash';
 import { useSpaceId } from '../../../../common/hooks/use_space_id';
 import { getAlertIndexAlias } from '../../utils/helpers';
 import { SecurityPageName } from '../../../../../common/constants';
@@ -16,16 +18,21 @@ import { useRouteSpy } from '../../../../common/utils/route/use_route_spy';
 import { useSourcererDataView } from '../../../../common/containers/sourcerer';
 import { useTimelineEventsDetails } from '../../../../timelines/containers/details';
 import type { EventPanel } from '../panel-model';
+import { useGetFieldsData } from '../../../../common/hooks/use_get_fields_data';
 
 export interface EventDetailsPanelContext {
   browserFields: BrowserFields | null;
+  dataAsNestedObject: Ecs | null;
   dataFormattedForFieldBrowser: TimelineEventsDetailsItem[] | null;
+  getFieldsData: (field: string) => unknown | unknown[];
   searchHit: SearchHit<object> | undefined;
 }
 
 export const EventDetailsFlyoutContext = createContext<EventDetailsPanelContext>({
   browserFields: null,
+  dataAsNestedObject: null,
   dataFormattedForFieldBrowser: null,
+  getFieldsData: noop,
   searchHit: undefined,
 });
 
@@ -46,25 +53,30 @@ export const EventDetailsPanelProvider = ({
       : SourcererScopeName.default;
   const sourcererDataView = useSourcererDataView(sourcererScope);
   const eventIndex = indexName ? getAlertIndexAlias(indexName, currentSpaceId) ?? indexName : '';
-  const [dataFormattedForFieldBrowser, searchHit] = useTimelineEventsDetails({
-    indexName: eventIndex,
-    eventId: id ?? '',
-    runtimeMappings: sourcererDataView.runtimeMappings,
-    skip: !id,
-  });
+  const [loading, dataFormattedForFieldBrowser, searchHit, dataAsNestedObject] =
+    useTimelineEventsDetails({
+      indexName: eventIndex,
+      eventId: id ?? '',
+      runtimeMappings: sourcererDataView.runtimeMappings,
+      skip: !id,
+    });
+
+  const getFieldsData = useGetFieldsData(searchHit?.fields);
 
   const contextValue = useMemo(
     () => ({
       browserFields: sourcererDataView.browserFields,
+      dataAsNestedObject,
       dataFormattedForFieldBrowser,
+      getFieldsData,
       searchHit,
     }),
-    [dataFormattedForFieldBrowser, searchHit, sourcererDataView]
+    [dataFormattedForFieldBrowser, dataAsNestedObject, getFieldsData, searchHit, sourcererDataView]
   );
 
   return (
     <EventDetailsFlyoutContext.Provider value={contextValue}>
-      {children}
+      {loading ? <>{'loading...'}</> : children}
     </EventDetailsFlyoutContext.Provider>
   );
 };

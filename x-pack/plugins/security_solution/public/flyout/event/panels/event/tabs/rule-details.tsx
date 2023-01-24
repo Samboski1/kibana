@@ -8,8 +8,8 @@
 import { EuiButton, EuiFlexGroup, EuiFlexItem, EuiSpacer, EuiText, EuiTitle } from '@elastic/eui';
 import { css } from '@emotion/react';
 import React from 'react';
-import { LineClamp } from '../../../../common/components/line_clamp';
-import { useEventDetailsPanelContext } from '../event/context';
+import { LineClamp } from '../../../../../common/components/line_clamp';
+import { useEventDetailsPanelContext } from '../context';
 
 export const RuleDetails = () => {
   const { getFieldsData } = useEventDetailsPanelContext();

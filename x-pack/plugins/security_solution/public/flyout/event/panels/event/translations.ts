@@ -17,6 +17,13 @@ export const HIGHLIGHTED_FIELDS_TITLE = i18n.translate(
   { defaultMessage: 'Highlighted fields' }
 );
 
+export const ALERT_REASON_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.alertReason.title',
+  {
+    defaultMessage: 'Reason',
+  }
+);
+
 export const EXPAND_DETAILS_BUTTON = i18n.translate(
   'xpack.securitySolution.flyout.eventDetails.expandDetailButton',
   { defaultMessage: 'Expand alert details' }

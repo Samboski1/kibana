@@ -12,7 +12,6 @@ import { useEventDetailsPanelContext } from '../context';
 
 export const EventJsonTab: React.FC = React.memo(() => {
   const { searchHit } = useEventDetailsPanelContext();
-  console.log('searchHit', searchHit);
   return (
     <div
       css={css`

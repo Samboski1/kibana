@@ -43,7 +43,7 @@ export const HighlightedFields = () => {
             data={dataFormattedForFieldBrowser}
             eventId={eventId}
             browserFields={browserFields}
-            isDraggable={scope === 'timelineFlyout'}
+            isDraggable={scope === 'timeline'}
             scopeId={scope}
             title={HIGHLIGHTED_FIELDS_TITLE}
             isReadOnly={false} // TODO: set properly
