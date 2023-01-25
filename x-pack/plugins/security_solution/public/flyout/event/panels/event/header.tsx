@@ -5,28 +5,13 @@
  * 2.0.
  */
 
-import {
-  EuiFlexGroup,
-  EuiFlexItem,
-  EuiFlyoutHeader,
-  EuiSpacer,
-  EuiTab,
-  EuiTabs,
-  EuiTitle,
-} from '@elastic/eui';
+import { EuiFlyoutHeader, EuiSpacer, EuiTab, EuiTabs } from '@elastic/eui';
 import React from 'react';
-import { isEmpty } from 'lodash';
-import { ALERT_RISK_SCORE, ALERT_SEVERITY } from '@kbn/rule-data-utils';
-import type { Severity } from '@kbn/securitysolution-io-ts-alerting-types';
-import { css } from '@emotion/css';
+import { css } from '@emotion/react';
+import { HeaderTitle } from './components/header-title';
 import { ExpandDetailButton } from './components/expand-detail-button';
-import { PreferenceFormattedDate } from '../../../../common/components/formatted_date';
-import { SeverityBadge } from '../../../../detections/components/rules/severity_badge';
 import { tabs } from './tabs';
 import type { EventPanelPaths } from '../panel-model';
-import { EVENT_DETAILS, RISK_SCORE_TITLE, SEVERITY_TITLE } from './translations';
-import { useEventDetailsPanelContext } from './context';
-import { useBasicDataFromDetailsData } from '../../utils/helpers';
 
 export const EventHeader = React.memo(
   ({
@@ -38,41 +23,6 @@ export const EventHeader = React.memo(
     setSelectedTabId: (selected: EventPanelPaths) => void;
     handleOnEventClosed?: () => void;
   }) => {
-    const { dataFormattedForFieldBrowser, getFieldsData } = useEventDetailsPanelContext();
-    const { isAlert, ruleName, timestamp } = useBasicDataFromDetailsData(
-      dataFormattedForFieldBrowser
-    );
-    const alertRiskScore = getFieldsData(ALERT_RISK_SCORE) as string;
-    const alertSeverity = getFieldsData(ALERT_SEVERITY) as Severity;
-    const titleSection = (
-      <>
-        <EuiTitle size="s">
-          <h4>{isAlert && !isEmpty(ruleName) ? ruleName : EVENT_DETAILS}</h4>
-        </EuiTitle>
-        <EuiSpacer size="m" />
-        {timestamp && <PreferenceFormattedDate value={new Date(timestamp)} />}
-        <EuiSpacer size="m" />
-        <EuiFlexGroup direction="row" gutterSize="l">
-          <EuiFlexItem grow={false}>
-            <EuiFlexGroup alignItems="center" direction="row" gutterSize="xs">
-              <EuiTitle size="xxs">
-                <h5>{`${SEVERITY_TITLE}:`}</h5>
-              </EuiTitle>
-              <SeverityBadge value={alertSeverity} />
-            </EuiFlexGroup>
-          </EuiFlexItem>
-          <EuiFlexItem grow={false}>
-            <EuiFlexGroup alignItems="center" direction="row" gutterSize="xs">
-              <EuiTitle size="xxs">
-                <h5>{`${RISK_SCORE_TITLE}:`}</h5>
-              </EuiTitle>
-              <span>{alertRiskScore}</span>
-            </EuiFlexGroup>
-          </EuiFlexItem>
-        </EuiFlexGroup>
-      </>
-    );
-
     const onSelectedTabChanged = (id: EventPanelPaths) => setSelectedTabId(id);
     const renderTabs = tabs.map((tab, index) => (
       <EuiTab
@@ -88,20 +38,19 @@ export const EventHeader = React.memo(
       <EuiFlyoutHeader
         hasBorder
         css={css`
-          padding-block-start: 0 !important;
+          margin-bottom: -24px;
         `}
       >
         <div
           css={css`
+            margin-top: -24px;
             margin-left: -8px;
           `}
         >
           <ExpandDetailButton />
         </div>
         <EuiSpacer size="m" />
-        <EuiFlexGroup>
-          <EuiFlexItem>{titleSection}</EuiFlexItem>
-        </EuiFlexGroup>
+        <HeaderTitle />
         <EuiSpacer size="m" />
         <EuiTabs
           size="l"

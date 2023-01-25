@@ -6,6 +6,7 @@
  */
 
 import { EuiFlyoutBody } from '@elastic/eui';
+import { css } from '@emotion/react';
 import React, { useMemo } from 'react';
 import type { EventPanelPaths } from '../panel-model';
 import { tabs } from './tabs';
@@ -15,5 +16,13 @@ export const EventContent = ({ selectedTabId }: { selectedTabId: EventPanelPaths
     return tabs.find((tab) => tab.id === selectedTabId)?.content;
   }, [selectedTabId]);
 
-  return <EuiFlyoutBody>{selectedTabContent}</EuiFlyoutBody>;
+  return (
+    <EuiFlyoutBody
+      css={css`
+        height: calc(100vh - 262px);
+      `}
+    >
+      {selectedTabContent}
+    </EuiFlyoutBody>
+  );
 };
