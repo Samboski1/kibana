@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { EuiFlexGroup, EuiPanel } from '@elastic/eui';
+import { EuiFlexGroup } from '@elastic/eui';
 import React, { useCallback, useState } from 'react';
 import { AlertSummaryView } from '../../../../../common/components/event_details/alert_summary_view';
 import { HIGHLIGHTED_FIELDS_TITLE } from '../translations';
@@ -27,30 +27,28 @@ export const HighlightedFields = () => {
   const isVisible = dataFormattedForFieldBrowser && browserFields && eventId && scope;
 
   return isVisible ? (
-    <EuiPanel hasBorder hasShadow={false}>
-      <EuiFlexGroup gutterSize="none" direction="column">
-        <HeaderSection
-          alignHeader="center"
-          hideSubtitle
-          outerDirection="row"
+    <EuiFlexGroup gutterSize="none" direction="column">
+      <HeaderSection
+        alignHeader="center"
+        hideSubtitle
+        outerDirection="row"
+        title={HIGHLIGHTED_FIELDS_TITLE}
+        titleSize="xs"
+        toggleQuery={setIsPanelExpanded}
+        toggleStatus={isPanelExpanded}
+      />
+      {isPanelExpanded && (
+        <AlertSummaryView
+          data={dataFormattedForFieldBrowser}
+          eventId={eventId}
+          browserFields={browserFields}
+          isDraggable={scope === 'timeline'}
+          scopeId={scope}
           title={HIGHLIGHTED_FIELDS_TITLE}
-          titleSize="xs"
-          toggleQuery={setIsPanelExpanded}
-          toggleStatus={isPanelExpanded}
+          isReadOnly={false} // TODO: set properly
+          goToTable={goToTableTab}
         />
-        {isPanelExpanded && (
-          <AlertSummaryView
-            data={dataFormattedForFieldBrowser}
-            eventId={eventId}
-            browserFields={browserFields}
-            isDraggable={scope === 'timeline'}
-            scopeId={scope}
-            title={HIGHLIGHTED_FIELDS_TITLE}
-            isReadOnly={false} // TODO: set properly
-            goToTable={goToTableTab}
-          />
-        )}
-      </EuiFlexGroup>
-    </EuiPanel>
+      )}
+    </EuiFlexGroup>
   ) : null;
 };

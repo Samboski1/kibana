@@ -17,10 +17,24 @@ export const HIGHLIGHTED_FIELDS_TITLE = i18n.translate(
   { defaultMessage: 'Highlighted fields' }
 );
 
-export const ALERT_REASON_TITLE = i18n.translate(
-  'xpack.securitySolution.flyout.eventDetails.alertReason.title',
+export const REASON_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.reason.title',
   {
     defaultMessage: 'Reason',
+  }
+);
+
+export const INSIGHTS_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.insights.title',
+  {
+    defaultMessage: 'Insights',
+  }
+);
+
+export const ENTITIES = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.entities.title',
+  {
+    defaultMessage: 'Entities',
   }
 );
 

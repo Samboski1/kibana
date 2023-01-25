@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { EuiFlexGroup, EuiPanel } from '@elastic/eui';
+import { EuiFlexGroup } from '@elastic/eui';
 import { css } from '@emotion/react';
 import React, { useMemo, useState } from 'react';
 import { HeaderSection } from '../../../../../common/components/header_section';
@@ -13,7 +13,7 @@ import { defaultRowRenderers } from '../../../../../timelines/components/timelin
 import { getRowRenderer } from '../../../../../timelines/components/timeline/body/renderers/get_row_renderer';
 import { useExpandableFlyoutContext } from '../../../../context';
 import { useEventDetailsPanelContext } from '../context';
-import { ALERT_REASON_TITLE } from '../translations';
+import { REASON_TITLE } from '../translations';
 
 export const ReasonDetails = () => {
   const [isPanelExpanded, setIsPanelExpanded] = useState(false);
@@ -29,38 +29,34 @@ export const ReasonDetails = () => {
   );
 
   return (
-    <EuiPanel hasBorder hasShadow={false}>
-      <EuiFlexGroup gutterSize="none" direction="column">
-        <HeaderSection
-          alignHeader="center"
-          hideSubtitle
-          outerDirection="row"
-          title={ALERT_REASON_TITLE}
-          titleSize="xs"
-          toggleQuery={setIsPanelExpanded}
-          toggleStatus={isPanelExpanded}
-        />
-        {isPanelExpanded && renderer != null && dataAsNestedObject != null && (
-          <div
-            data-test-subj="renderer"
-            css={css`
-              overflow-x: auto;
-              margin-left: -24px;
-
-              & .euiFlexGroup {
-                justify-content: flex-start;
-              }
-            `}
-          >
-            {renderer.renderRow({
-              contextId: 'event-details',
-              data: dataAsNestedObject,
-              isDraggable: scope === 'timeline',
-              scopeId: scope ?? '',
-            })}
-          </div>
-        )}
-      </EuiFlexGroup>
-    </EuiPanel>
+    <EuiFlexGroup gutterSize="none" direction="column">
+      <HeaderSection
+        alignHeader="center"
+        hideSubtitle
+        outerDirection="row"
+        title={REASON_TITLE}
+        titleSize="xs"
+        toggleQuery={setIsPanelExpanded}
+        toggleStatus={isPanelExpanded}
+      />
+      {isPanelExpanded && renderer != null && dataAsNestedObject != null && (
+        <div
+          data-test-subj="renderer"
+          css={css`
+            overflow-x: auto;
+            & .euiFlexGroup {
+              justify-content: flex-start;
+            }
+          `}
+        >
+          {renderer.renderRow({
+            contextId: 'event-details',
+            data: dataAsNestedObject,
+            isDraggable: scope === 'timeline',
+            scopeId: scope ?? '',
+          })}
+        </div>
+      )}
+    </EuiFlexGroup>
   );
 };
