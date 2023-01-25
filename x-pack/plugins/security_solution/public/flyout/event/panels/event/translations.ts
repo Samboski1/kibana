@@ -29,6 +29,20 @@ export const EXPAND_DETAILS_BUTTON = i18n.translate(
   { defaultMessage: 'Expand alert details' }
 );
 
+export const RISK_SCORE_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.riskScore.title',
+  {
+    defaultMessage: 'Risk score',
+  }
+);
+
+export const SEVERITY_TITLE = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.severity.title',
+  {
+    defaultMessage: 'Severity',
+  }
+);
+
 export const OVERVIEW_TAB = i18n.translate(
   'xpack.securitySolution.flyout.eventDetails.overviewTab',
   { defaultMessage: 'Overview' }
