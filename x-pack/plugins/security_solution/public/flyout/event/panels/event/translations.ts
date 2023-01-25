@@ -29,6 +29,11 @@ export const EXPAND_DETAILS_BUTTON = i18n.translate(
   { defaultMessage: 'Expand alert details' }
 );
 
+export const COLLAPSE_DETAILS_BUTTON = i18n.translate(
+  'xpack.securitySolution.flyout.eventDetails.collapseDetailButton',
+  { defaultMessage: 'Collapse alert details' }
+);
+
 export const RISK_SCORE_TITLE = i18n.translate(
   'xpack.securitySolution.flyout.eventDetails.riskScore.title',
   {

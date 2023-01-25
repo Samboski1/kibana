@@ -6,11 +6,9 @@
  */
 
 import {
-  EuiButtonEmpty,
   EuiFlexGroup,
   EuiFlexItem,
   EuiFlyoutHeader,
-  EuiHorizontalRule,
   EuiSpacer,
   EuiTab,
   EuiTabs,
@@ -20,11 +18,12 @@ import React from 'react';
 import { isEmpty } from 'lodash';
 import { ALERT_RISK_SCORE, ALERT_SEVERITY } from '@kbn/rule-data-utils';
 import type { Severity } from '@kbn/securitysolution-io-ts-alerting-types';
+import { css } from '@emotion/css';
+import { ExpandDetailButton } from './components/expand-detail-button';
 import { PreferenceFormattedDate } from '../../../../common/components/formatted_date';
 import { SeverityBadge } from '../../../../detections/components/rules/severity_badge';
 import { tabs } from './tabs';
 import type { EventPanelPaths } from '../panel-model';
-import { useExpandableFlyoutContext } from '../../../context';
 import { EVENT_DETAILS, RISK_SCORE_TITLE, SEVERITY_TITLE } from './translations';
 import { useEventDetailsPanelContext } from './context';
 import { useBasicDataFromDetailsData } from '../../utils/helpers';
@@ -39,26 +38,6 @@ export const EventHeader = React.memo(
     setSelectedTabId: (selected: EventPanelPaths) => void;
     handleOnEventClosed?: () => void;
   }) => {
-    const { searchHit } = useEventDetailsPanelContext();
-    const { _id, _index } = searchHit ?? {};
-    const { openPanels } = useExpandableFlyoutContext();
-    const openAlertDetails = () => {
-      openPanels({
-        left: {
-          key: 'visualize',
-          params: {
-            id: _id,
-            indexName: _index,
-          },
-        },
-      });
-    };
-    const expandButton = (
-      <EuiButtonEmpty iconSide="left" onClick={openAlertDetails} iconType="arrowStart">
-        EXPAND_DETAILS_BUTTON
-      </EuiButtonEmpty>
-    );
-
     const { dataFormattedForFieldBrowser, getFieldsData } = useEventDetailsPanelContext();
     const { isAlert, ruleName, timestamp } = useBasicDataFromDetailsData(
       dataFormattedForFieldBrowser
@@ -106,16 +85,31 @@ export const EventHeader = React.memo(
     ));
 
     return (
-      <EuiFlyoutHeader>
-        <EuiFlexGroup>
-          <EuiFlexItem>{expandButton}</EuiFlexItem>
-        </EuiFlexGroup>
-        <EuiHorizontalRule margin="none" />
+      <EuiFlyoutHeader
+        hasBorder
+        css={css`
+          padding-block-start: 0 !important;
+        `}
+      >
+        <div
+          css={css`
+            margin-left: -8px;
+          `}
+        >
+          <ExpandDetailButton />
+        </div>
+        <EuiSpacer size="m" />
         <EuiFlexGroup>
           <EuiFlexItem>{titleSection}</EuiFlexItem>
         </EuiFlexGroup>
-        <EuiHorizontalRule margin="none" />
-        <EuiTabs size="l" expand>
+        <EuiSpacer size="m" />
+        <EuiTabs
+          size="l"
+          expand
+          css={css`
+            margin-bottom: -25px;
+          `}
+        >
           {renderTabs}
         </EuiTabs>
       </EuiFlyoutHeader>
