@@ -7,8 +7,8 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/react';
+import { useVisualizeDetailsPanelContext } from '../context';
 import { useKibana } from '../../../../../common/lib/kibana';
-import { useEventDetailsPanelContext } from '../../event/context';
 
 export const SESSION_VIEW_ID = 'session_view';
 
@@ -16,7 +16,7 @@ export const SessionView = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>(undefined);
   const { sessionView } = useKibana().services;
-  const { searchHit, getFieldsData } = useEventDetailsPanelContext();
+  const { searchHit, getFieldsData } = useVisualizeDetailsPanelContext();
   const databaseDocumentID = searchHit?._id as string; // Is the eventID - We won't render without this
   const processEntityId = getFieldsData('process.entity_id') as string;
   const sessionEntityId = getFieldsData('process.entry_leader.entity_id') as string;

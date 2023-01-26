@@ -6,15 +6,15 @@
  */
 
 import React from 'react';
+import { useVisualizeDetailsPanelContext } from '../context';
 import { useGlobalOrTimelineFilters } from '../../../../../common/hooks/use_global_or_timeline_filters';
 import { Resolver } from '../../../../../resolver/view';
-import { useEventDetailsPanelContext } from '../../event/context';
 
 export const ANALYZE_GRAPH_ID = 'analyze_graph';
 
 export const AnalyzeGraph = () => {
   const { selectedPatterns, from, to, shouldUpdate } = useGlobalOrTimelineFilters(false);
-  const { searchHit } = useEventDetailsPanelContext();
+  const { searchHit } = useVisualizeDetailsPanelContext();
   const databaseDocumentID = searchHit?._id as string; // Is the eventID - We won't render without this
   return (
     <Resolver

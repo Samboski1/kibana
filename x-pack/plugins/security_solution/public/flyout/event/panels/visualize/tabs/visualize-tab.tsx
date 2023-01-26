@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import { EuiButtonEmpty, EuiButtonGroup, EuiSpacer } from '@elastic/eui';
-import { useEventDetailsPanelContext } from '../../event/context';
+import { useVisualizeDetailsPanelContext } from '../context';
 import { useExpandableFlyoutContext } from '../../../../context';
 import { ANALYZE_GRAPH_ID, AnalyzeGraph } from '../components/analyze_graph';
 import { ANALYZER_GRAPH, SESSION_VIEW, VISUALIZE_OPTIONS } from '../translations';
@@ -32,7 +32,7 @@ export const VisualizeTab: React.FC = React.memo(() => {
     setActiveVisualizationId(optionId);
   };
 
-  const { searchHit } = useEventDetailsPanelContext();
+  const { searchHit } = useVisualizeDetailsPanelContext();
   const { _id, _index } = searchHit ?? {};
   if (!_id || !_index) return <></>;
 
