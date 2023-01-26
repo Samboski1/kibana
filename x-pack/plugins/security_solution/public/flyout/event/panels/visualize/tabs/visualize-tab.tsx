@@ -7,10 +7,11 @@
 
 import React, { useState } from 'react';
 import { EuiButtonEmpty, EuiButtonGroup, EuiSpacer } from '@elastic/eui';
+import { useEventDetailsPanelContext } from '../../event/context';
 import { useExpandableFlyoutContext } from '../../../../context';
-import { ANALYZE_GRAPH_ID, AnalyzeGraph } from './analyze_graph';
+import { ANALYZE_GRAPH_ID, AnalyzeGraph } from '../components/analyze_graph';
 import { ANALYZER_GRAPH, SESSION_VIEW, VISUALIZE_OPTIONS } from '../translations';
-import { SESSION_VIEW_ID, SessionView } from './session_view';
+import { SESSION_VIEW_ID, SessionView } from '../components/session_view';
 
 const visualizeButtons = [
   {
@@ -31,10 +32,18 @@ export const VisualizeTab: React.FC = React.memo(() => {
     setActiveVisualizationId(optionId);
   };
 
+  const { searchHit } = useEventDetailsPanelContext();
+  const { _id, _index } = searchHit ?? {};
+  if (!_id || !_index) return <></>;
+
   const openPreview = () => {
     openPanels({
       preview: {
         key: 'preview',
+        params: {
+          id: _id,
+          indexName: _index,
+        },
       },
     });
   };

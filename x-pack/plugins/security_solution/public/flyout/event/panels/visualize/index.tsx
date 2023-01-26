@@ -45,4 +45,4 @@ export const EventVisualizePanel: React.FC<VisualizePanel> = React.memo(({ path 
   );
 });
 
-EventVisualizePanel.displayName = 'EventDetailsPanel';
+EventVisualizePanel.displayName = 'EventVisualizePanel';

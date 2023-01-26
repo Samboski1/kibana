@@ -8,7 +8,7 @@
 import React, { useMemo } from 'react';
 import { css } from '@emotion/react';
 import type { EuiFlyoutProps } from '@elastic/eui';
-import { EuiFlexGroup, EuiFlexItem, EuiFlyout } from '@elastic/eui';
+import { EuiFlexGroup, EuiFlexItem, EuiFlyout, EuiPanel } from '@elastic/eui';
 import { useExpandableFlyoutContext } from '../../../flyout/context';
 import type { SecurityFlyoutPanel } from '../../store/flyout/model';
 
@@ -54,6 +54,7 @@ export const ExpandableFlyout: React.FC<ExpandableFlyoutProps> = ({ panels, ...f
   );
 
   const width: number = (leftSection?.width ?? 0) + (rightSection?.width ?? 0);
+  const previewWith: string = leftSection ? `${leftSection.width}px` : '0px';
 
   return (
     <EuiFlyout
@@ -87,18 +88,37 @@ export const ExpandableFlyout: React.FC<ExpandableFlyoutProps> = ({ panels, ...f
       </EuiFlexGroup>
 
       {previewSection && preview ? (
-        <div
-          style={{
-            position: 'absolute',
-            top: '8px',
-            bottom: '0px',
-            right: '8px',
-            left: leftSection ? `${leftSection.width + 8}px` : '8px',
-            borderRadius: '6px 6px 0px 0px',
-          }}
-        >
-          {previewSection.component({ ...preview })}
-        </div>
+        <>
+          <div
+            css={css`
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              right: 0;
+              left: ${previewWith};
+              background-color: #242934;
+              opacity: 0.5;
+            `}
+          />
+          <div
+            css={css`
+              position: absolute;
+              top: 0;
+              bottom: 0;
+              right: 0;
+              left: ${previewWith};
+            `}
+          >
+            <EuiPanel
+              css={css`
+                margin: 8px;
+                height: 100%;
+              `}
+            >
+              {previewSection.component({ ...preview })}
+            </EuiPanel>
+          </div>
+        </>
       ) : null}
     </EuiFlyout>
   );

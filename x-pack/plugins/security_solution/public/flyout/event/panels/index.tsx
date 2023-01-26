@@ -6,11 +6,14 @@
  */
 
 import React from 'react';
+import { VisualizeDetailsPanelProvider } from './visualize/context';
+import { PreviewDetailsPanel, PreviewDetailsPanelKey } from './preview';
+import { PreviewDetailsPanelProvider } from './preview/context';
 import { EventVisualizePanel, EventVisualizePanelKey } from './visualize';
 import { EventDetailsPanel, EventDetailsPanelKey } from './event';
 import type { ExpandableFlyoutProps } from '../../../common/components/expandable_flyout';
 import { EventDetailsPanelProvider } from './event/context';
-import type { EventPanel, VisualizePanel } from './panel-model';
+import type { EventPanel, PreviewPanel, VisualizePanel } from './panel-model';
 
 export const expandableFlyoutPanels: ExpandableFlyoutProps['panels'] = [
   {
@@ -26,9 +29,18 @@ export const expandableFlyoutPanels: ExpandableFlyoutProps['panels'] = [
     key: EventVisualizePanelKey,
     width: 1000,
     component: (props) => (
-      <EventDetailsPanelProvider {...(props as VisualizePanel).params}>
+      <VisualizeDetailsPanelProvider {...(props as VisualizePanel).params}>
         <EventVisualizePanel />
-      </EventDetailsPanelProvider>
+      </VisualizeDetailsPanelProvider>
+    ),
+  },
+  {
+    key: PreviewDetailsPanelKey,
+    width: 500,
+    component: (props) => (
+      <PreviewDetailsPanelProvider {...(props as PreviewPanel).params}>
+        <PreviewDetailsPanel />
+      </PreviewDetailsPanelProvider>
     ),
   },
 ];
