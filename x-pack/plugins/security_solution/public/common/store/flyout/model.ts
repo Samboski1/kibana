@@ -5,11 +5,21 @@
  * 2.0.
  */
 
-import type { EventPanel, VisualizePanel } from '../../../flyout/event/panels/panel-model';
+import type {
+  AlertPanel,
+  EventPanel,
+  PreviewPanel,
+  VisualizePanel,
+} from '../../../flyout/event/panels/panel-model';
 
 export type SecurityFlyoutScope = 'global' | 'timeline';
 
-export type SecurityFlyoutPanel = EventPanel | VisualizePanel | Record<string | number, never>; // Empty object
+export type SecurityFlyoutPanel =
+  | EventPanel
+  | VisualizePanel
+  | AlertPanel
+  | PreviewPanel
+  | Record<string | number, never>; // Empty object
 
 export interface SecurityFlyoutLayout {
   left?: SecurityFlyoutPanel;

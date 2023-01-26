@@ -19,7 +19,7 @@ export const VisualizeContent = ({ selectedTabId }: { selectedTabId: VisualizePa
   return (
     <EuiFlyoutBody
       css={css`
-        height: calc(100vh - 262px);
+        height: calc(100vh - 160px);
       `}
     >
       {selectedTabContent}

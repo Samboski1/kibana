@@ -246,6 +246,7 @@ export class ProcessImpl implements Process {
       EventAction.end,
     ];
     const filtered = events.filter((processEvent) => {
+      return true;
       return actionsToFind.includes(processEvent.event?.action);
     });
 

@@ -7,12 +7,16 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { css } from '@emotion/react';
+import type { ProcessEvent } from '@kbn/session-view-plugin/common/types/process_tree';
+import type { Process } from '@kbn/session-view-plugin/common/types/process_tree';
+import { useExpandableFlyoutContext } from '../../../../context';
 import { useVisualizeDetailsPanelContext } from '../context';
 import { useKibana } from '../../../../../common/lib/kibana';
 
 export const SESSION_VIEW_ID = 'session_view';
 
 export const SessionView = () => {
+  const { openPanels } = useExpandableFlyoutContext();
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<number | undefined>(undefined);
   const { sessionView } = useKibana().services;
@@ -42,6 +46,36 @@ export const SessionView = () => {
     };
   });
 
+  const showAlertDetails = (
+    alerts: ProcessEvent[],
+    alertsCount: number,
+    isFetchingAlerts: boolean,
+    hasNextPageAlerts: boolean,
+    fetchNextPageAlerts: () => void,
+    investigatedAlertId: string,
+    onJumpToEvent: (event: ProcessEvent) => void,
+    onShowAlertDetails: (alertId: string) => void,
+    selectedProcess: Process | null
+  ) => {
+    debugger;
+    openPanels({
+      preview: {
+        key: 'alert',
+        params: {
+          alerts,
+          alertsCount,
+          isFetchingAlerts,
+          hasNextPageAlerts,
+          fetchNextPageAlerts,
+          investigatedAlertId,
+          onJumpToEvent,
+          onShowAlertDetails,
+          selectedProcess,
+        },
+      },
+    });
+  };
+
   if (sessionEntityId === undefined) return null;
   return (
     <div
@@ -57,9 +91,9 @@ export const SessionView = () => {
         jumpToEntityId: processEntityId,
         jumpToCursor: timestamp,
         investigatedAlertId: databaseDocumentID,
-        loadAlertDetails: () => {}, // This will be the "Preview loader",
         isFullScreen: false,
         canAccessEndpointManagement: false,
+        showAlertDetails,
       })}
     </div>
   );

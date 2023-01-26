@@ -7,26 +7,13 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { EuiTabs, EuiTab, EuiNotificationBadge } from '@elastic/eui';
 import { i18n } from '@kbn/i18n';
-import { EuiTabProps } from '../../types';
-import { Process, ProcessEvent } from '../../../common/types/process_tree';
+import { EuiTabProps, SessionViewDetailPanelDeps } from '../../types';
 import { getSelectedTabContent } from './helpers';
 import { DetailPanelProcessTab } from '../detail_panel_process_tab';
 import { DetailPanelMetadataTab } from '../detail_panel_metadata_tab';
 import { useStyles } from './styles';
 import { DetailPanelAlertTab } from '../detail_panel_alert_tab';
 import { ALERT_COUNT_THRESHOLD } from '../../../common/constants';
-
-interface SessionViewDetailPanelDeps {
-  selectedProcess: Process | null;
-  alerts?: ProcessEvent[];
-  alertsCount: number;
-  isFetchingAlerts: boolean;
-  hasNextPageAlerts?: boolean;
-  fetchNextPageAlerts: () => void;
-  investigatedAlertId?: string;
-  onJumpToEvent: (event: ProcessEvent) => void;
-  onShowAlertDetails: (alertId: string) => void;
-}
 
 /**
  * Detail panel in the session view.
@@ -139,3 +126,6 @@ export const SessionViewDetailPanel = ({
     </div>
   );
 };
+
+// eslint-disable-next-line import/no-default-export
+export { SessionViewDetailPanel as default };

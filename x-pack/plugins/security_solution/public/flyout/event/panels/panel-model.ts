@@ -5,6 +5,8 @@
  * 2.0.
  */
 
+import type { ProcessEvent } from '@kbn/session-view-plugin/common/types/process_tree';
+import type { Process } from '@kbn/session-view-plugin/common/types/process_tree';
 import type { SecurityFlyoutPanel } from '../../../common/store/flyout/panel-model';
 
 export type EventPanelPaths = 'overview' | 'table' | 'json';
@@ -35,5 +37,20 @@ export interface PreviewPanel extends SecurityFlyoutPanel {
   params?: {
     id: string;
     indexName: string;
+  };
+}
+
+export interface AlertPanel extends SecurityFlyoutPanel {
+  key: 'alert';
+  params: {
+    alerts?: ProcessEvent[];
+    alertsCount: number;
+    isFetchingAlerts: boolean;
+    hasNextPageAlerts?: boolean;
+    fetchNextPageAlerts: () => void;
+    investigatedAlertId?: string;
+    onJumpToEvent: (event: ProcessEvent) => void;
+    onShowAlertDetails: (alertId: string) => void;
+    selectedProcess: Process | null;
   };
 }

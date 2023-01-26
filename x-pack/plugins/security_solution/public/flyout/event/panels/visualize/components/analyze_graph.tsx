@@ -6,18 +6,24 @@
  */
 
 import React from 'react';
+import styled from 'styled-components';
 import { useVisualizeDetailsPanelContext } from '../context';
 import { useGlobalOrTimelineFilters } from '../../../../../common/hooks/use_global_or_timeline_filters';
 import { Resolver } from '../../../../../resolver/view';
 
 export const ANALYZE_GRAPH_ID = 'analyze_graph';
 
+const StyledResolver = styled(Resolver)`
+  height: 100%;
+`;
+
 export const AnalyzeGraph = () => {
   const { selectedPatterns, from, to, shouldUpdate } = useGlobalOrTimelineFilters(false);
   const { searchHit } = useVisualizeDetailsPanelContext();
   const databaseDocumentID = searchHit?._id as string; // Is the eventID - We won't render without this
+
   return (
-    <Resolver
+    <StyledResolver
       databaseDocumentID={databaseDocumentID}
       resolverComponentInstanceID="event-flyout" // TODO: Set explicit instanceId
       indices={selectedPatterns}

@@ -6,6 +6,7 @@
  */
 import { ReactNode } from 'react';
 import { CoreStart } from '@kbn/core/public';
+import { Process, ProcessEvent } from '../common/types/process_tree';
 
 export type SessionViewServices = CoreStart;
 
@@ -28,6 +29,29 @@ export interface SessionViewDeps {
     handleOnAlertDetailsClosed: () => void
   ) => void;
   canAccessEndpointManagement?: boolean;
+  showAlertDetails: (
+    alerts: ProcessEvent[],
+    alertsCount: number,
+    isFetchingAlerts: boolean,
+    hasNextPageAlerts: boolean,
+    fetchNextPageAlerts: () => void,
+    investigatedAlertId: string,
+    onJumpToEvent: (event: ProcessEvent) => void,
+    onShowAlertDetails: (alertId: string) => void,
+    selectedProcess: Process | null
+  ) => void;
+}
+
+export interface SessionViewDetailPanelDeps {
+  selectedProcess: Process | null;
+  alerts?: ProcessEvent[];
+  alertsCount: number;
+  isFetchingAlerts: boolean;
+  hasNextPageAlerts?: boolean;
+  fetchNextPageAlerts: () => void;
+  investigatedAlertId?: string;
+  onJumpToEvent: (event: ProcessEvent) => void;
+  onShowAlertDetails: (alertId: string) => void;
 }
 
 export interface EuiTabProps {
@@ -135,4 +159,5 @@ export interface DetailPanelCloud {
 
 export interface SessionViewStart {
   getSessionView: (props: SessionViewDeps) => JSX.Element;
+  getSessionViewDetailPanel: (props: SessionViewDetailPanelDeps) => JSX.Element;
 }

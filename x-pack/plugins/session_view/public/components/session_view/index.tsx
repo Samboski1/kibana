@@ -54,6 +54,7 @@ export const SessionView = ({
   investigatedAlertId,
   loadAlertDetails,
   canAccessEndpointManagement,
+  showAlertDetails,
 }: SessionViewDeps) => {
   // don't engage jumpTo if jumping to session leader.
   if (jumpToEntityId === sessionEntityId) {
@@ -208,7 +209,17 @@ export const SessionView = ({
   const toggleDetailPanel = useCallback(() => {
     detailPanelCollapseFn.current();
     setIsDetailOpen(!isDetailOpen);
-  }, [isDetailOpen]);
+    showAlertDetails(
+      alerts,
+      alertsCount,
+      isFetchingAlerts,
+      hasNextPageAlerts,
+      fetchNextPageAlerts,
+      investigatedAlertId,
+      onJumpToEvent,
+      onShowAlertDetails
+    );
+  }, [isDetailOpen, showAlertDetails]);
 
   const onShowAlertDetails = useCallback(
     (alertUuid: string) => {
