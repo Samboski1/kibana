@@ -10,7 +10,7 @@
 import { i18n } from '@kbn/i18n';
 import { memoize } from 'lodash';
 import { SuggestionRawDefinition } from './types';
-import { groupingFunctionDefinitions } from '../definitions/grouping';
+import { groupingFunctionDefinitions } from '../definitions/generated/grouping_functions';
 import { aggregationFunctionDefinitions } from '../definitions/generated/aggregation_functions';
 import { scalarFunctionDefinitions } from '../definitions/generated/scalar_functions';
 import { getFunctionSignatures } from '../definitions/helpers';
@@ -28,6 +28,7 @@ import { ESQLRealField } from '../validation/types';
 import { isNumericType } from '../shared/esql_types';
 import { getTestFunctions } from '../shared/test_functions';
 import { builtinFunctions } from '../definitions/builtin';
+import { ESQLVariableType, ESQLControlVariable } from '../shared/types';
 
 const techPreviewLabel = i18n.translate(
   'kbn-esql-validation-autocomplete.esql.autocomplete.techPreviewLabel',
@@ -194,9 +195,16 @@ export const getSuggestionsAfterNot = (): SuggestionRawDefinition[] => {
 
 export const buildFieldsDefinitionsWithMetadata = (
   fields: ESQLRealField[],
-  options?: { advanceCursor?: boolean; openSuggestions?: boolean; addComma?: boolean }
+  options?: {
+    advanceCursor?: boolean;
+    openSuggestions?: boolean;
+    addComma?: boolean;
+    variableType?: ESQLVariableType;
+    supportsControls?: boolean;
+  },
+  getVariablesByType?: (type: ESQLVariableType) => ESQLControlVariable[] | undefined
 ): SuggestionRawDefinition[] => {
-  return fields.map((field) => {
+  const fieldsSuggestions = fields.map((field) => {
     const titleCaseType = field.type.charAt(0).toUpperCase() + field.type.slice(1);
     return {
       label: field.name,
@@ -210,7 +218,23 @@ export const buildFieldsDefinitionsWithMetadata = (
       sortText: field.isEcs ? '1D' : 'D',
       command: options?.openSuggestions ? TRIGGER_SUGGESTION_COMMAND : undefined,
     };
-  });
+  }) as SuggestionRawDefinition[];
+
+  const suggestions = [...fieldsSuggestions];
+  if (options?.supportsControls) {
+    const variableType = options?.variableType ?? ESQLVariableType.FIELDS;
+    const variables = getVariablesByType?.(variableType) ?? [];
+
+    const controlSuggestions = fields.length
+      ? getControlSuggestion(
+          variableType,
+          variables?.map((v) => `?${v.key}`)
+        )
+      : [];
+    suggestions.push(...controlSuggestions);
+  }
+
+  return [...suggestions];
 };
 
 export const buildFieldsDefinitions = (fields: string[]): SuggestionRawDefinition[] => {
@@ -435,8 +459,12 @@ export function getUnitDuration(unit: number = 1) {
 export function getCompatibleLiterals(
   commandName: string,
   types: string[],
-  names?: string[],
-  options?: { advanceCursorAndOpenSuggestions?: boolean; addComma?: boolean }
+  options?: {
+    advanceCursorAndOpenSuggestions?: boolean;
+    addComma?: boolean;
+    supportsControls?: boolean;
+  },
+  getVariablesByType?: (type: ESQLVariableType) => ESQLControlVariable[] | undefined
 ) {
   const suggestions: SuggestionRawDefinition[] = [];
   if (types.some(isNumericType)) {
@@ -450,10 +478,20 @@ export function getCompatibleLiterals(
     }
   }
   if (types.includes('time_literal')) {
+    const timeLiteralSuggestions = [
+      ...buildConstantsDefinitions(getUnitDuration(1), undefined, undefined, options),
+    ];
+    if (options?.supportsControls) {
+      const variables = getVariablesByType?.(ESQLVariableType.TIME_LITERAL) ?? [];
+      timeLiteralSuggestions.push(
+        ...getControlSuggestion(
+          ESQLVariableType.TIME_LITERAL,
+          variables.map((v) => `?${v.key}`)
+        )
+      );
+    }
     // filter plural for now and suggest only unit + singular
-    suggestions.push(
-      ...buildConstantsDefinitions(getUnitDuration(1), undefined, undefined, options)
-    ); // i.e. 1 year
+    suggestions.push(...timeLiteralSuggestions); // i.e. 1 year
   }
   // this is a special type built from the suggestion system, not inherited from the AST
   if (types.includes('time_literal_unit')) {
@@ -465,25 +503,6 @@ export function getCompatibleLiterals(
         options
       )
     ); // i.e. year, month, ...
-  }
-  if (types.includes('string')) {
-    if (names) {
-      const index = types.indexOf('string');
-      if (/pattern/.test(names[index])) {
-        suggestions.push(
-          ...buildConstantsDefinitions(
-            [commandName === 'grok' ? '"%{WORD:firstWord}"' : '"%{firstWord}"'],
-            i18n.translate('kbn-esql-validation-autocomplete.esql.autocomplete.aPatternString', {
-              defaultMessage: 'A pattern string',
-            }),
-            undefined,
-            options
-          )
-        );
-      } else {
-        suggestions.push(...buildConstantsDefinitions(['string'], '', undefined, options));
-      }
-    }
   }
   return suggestions;
 }
@@ -541,5 +560,68 @@ export function getDateLiterals(options?: {
         ),
       },
     } as SuggestionRawDefinition,
+  ];
+}
+
+export function getControlSuggestionIfSupported(
+  supportsControls: boolean,
+  type: ESQLVariableType,
+  getVariablesByType?: (type: ESQLVariableType) => ESQLControlVariable[] | undefined
+) {
+  if (!supportsControls) {
+    return [];
+  }
+  const variableType = type;
+  const variables = getVariablesByType?.(variableType) ?? [];
+  const controlSuggestion = getControlSuggestion(
+    variableType,
+    variables?.map((v) => `?${v.key}`)
+  );
+  return controlSuggestion;
+}
+
+export function getControlSuggestion(
+  type: ESQLVariableType,
+  variables?: string[]
+): SuggestionRawDefinition[] {
+  return [
+    {
+      label: i18n.translate(
+        'kbn-esql-validation-autocomplete.esql.autocomplete.createControlLabel',
+        {
+          defaultMessage: 'Create control',
+        }
+      ),
+      text: '',
+      kind: 'Issue',
+      detail: i18n.translate(
+        'kbn-esql-validation-autocomplete.esql.autocomplete.createControlDetailLabel',
+        {
+          defaultMessage: 'Click to create',
+        }
+      ),
+      sortText: '1',
+      command: {
+        id: `esql.control.${type}.create`,
+        title: i18n.translate(
+          'kbn-esql-validation-autocomplete.esql.autocomplete.createControlDetailLabel',
+          {
+            defaultMessage: 'Click to create',
+          }
+        ),
+      },
+    } as SuggestionRawDefinition,
+    ...(variables?.length
+      ? buildConstantsDefinitions(
+          variables,
+          i18n.translate(
+            'kbn-esql-validation-autocomplete.esql.autocomplete.namedParamDefinition',
+            {
+              defaultMessage: 'Named parameter',
+            }
+          ),
+          '1A'
+        )
+      : []),
   ];
 }

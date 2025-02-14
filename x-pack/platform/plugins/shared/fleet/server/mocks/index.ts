@@ -140,6 +140,7 @@ export const createAppContextStartContractMock = (
       : {}),
     unenrollInactiveAgentsTask: {} as any,
     deleteUnenrolledAgentsTask: {} as any,
+    syncIntegrationsTask: {} as any,
   };
 };
 
@@ -290,6 +291,7 @@ export const createFleetStartContractMock = (): DeeplyMockedKeys<FleetStartContr
 
   const startContract: DeeplyMockedKeys<FleetStartContract> = {
     fleetSetupCompleted: jest.fn(async () => {}),
+    agentless: { enabled: false },
     authz: { fromRequest: jest.fn(async (_) => fleetAuthzMock) },
     packageService: createMockPackageService(),
     agentService: createMockAgentService(),

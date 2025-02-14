@@ -22,21 +22,26 @@ import {
   touchStart,
 } from './test_utils/events';
 
+const onLayoutChange = jest.fn();
+
 const renderGridLayout = (propsOverrides: Partial<GridLayoutProps> = {}) => {
-  const defaultProps: GridLayoutProps = {
+  const props = {
     accessMode: 'EDIT',
     layout: getSampleLayout(),
     gridSettings,
     renderPanelContents: mockRenderPanelContents,
-    onLayoutChange: jest.fn(),
-  };
+    onLayoutChange,
+    ...propsOverrides,
+  } as GridLayoutProps;
 
-  const { rerender, ...rtlRest } = render(<GridLayout {...defaultProps} {...propsOverrides} />);
+  const { rerender, ...rtlRest } = render(<GridLayout {...props} />);
 
   return {
     ...rtlRest,
-    rerender: (overrides: Partial<GridLayoutProps>) =>
-      rerender(<GridLayout {...defaultProps} {...overrides} />),
+    rerender: (overrides: Partial<GridLayoutProps>) => {
+      const newProps = { ...props, ...overrides } as GridLayoutProps;
+      return rerender(<GridLayout {...newProps} />);
+    },
   };
 };
 
@@ -74,6 +79,41 @@ describe('GridLayout', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('`onLayoutChange` gets called when layout prop changes', () => {
+    const layoutComponent = renderGridLayout();
+    onLayoutChange.mockClear();
+
+    const layout = getSampleLayout();
+
+    // if layout hasn't changed, don't call `onLayoutChange`
+    layoutComponent.rerender({
+      layout,
+    });
+    expect(onLayoutChange).not.toBeCalled();
+
+    // if layout **has** changed, call `onLayoutChange`
+    const newLayout = cloneDeep(layout);
+    newLayout[0] = {
+      ...newLayout[0],
+      panels: {
+        ...newLayout[0].panels,
+        panel1: {
+          id: 'panel1',
+          row: 100,
+          column: 0,
+          width: 12,
+          height: 6,
+        },
+      },
+    };
+
+    layoutComponent.rerender({
+      layout: newLayout,
+    });
+
+    expect(onLayoutChange).toBeCalledTimes(1);
   });
 
   it(`'renderPanelContents' is not called during dragging`, () => {

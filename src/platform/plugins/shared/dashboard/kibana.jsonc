@@ -1,9 +1,7 @@
 {
   "type": "plugin",
   "id": "@kbn/dashboard-plugin",
-  "owner": [
-    "@elastic/kibana-presentation"
-  ],
+  "owner": ["@elastic/kibana-presentation"],
   "group": "platform",
   "visibility": "shared",
   "description": "Adds the Dashboard app to Kibana",
@@ -28,8 +26,7 @@
       "uiActions",
       "urlForwarding",
       "presentationUtil",
-      "visualizations",
-      "unifiedSearch",
+      "unifiedSearch"
     ],
     "optionalPlugins": [
       "home",
